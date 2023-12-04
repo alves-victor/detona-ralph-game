@@ -12,7 +12,7 @@ const state = {
         score: 0,
         clicked: false,
         lives: 3,
-        timer: 10
+        timer: 60
     },
     intervals: {
         moveEnemyId: null,
@@ -41,10 +41,17 @@ function addEnemyToRandomSquare(){
     registerClickedState(false);
 }
 
+function playSound(soundName){
+    let audio = new Audio(`./src/sounds/${soundName}.m4a`);
+    audio.volume = 0.01;
+    audio.play();
+}
+
 function addHitListenerOnSquares(){
     state.view.squares.forEach((square) => {
         square.addEventListener("mousedown", () => {
             if(square.id === state.values.hitPosition && state.values.clicked === false){
+                playSound("hit");
                 registerClickedState(true);
                 state.values.score++;
                 state.view.scorePoints.innerHTML = state.values.score;
@@ -77,6 +84,7 @@ function missClickDamage(){
     state.values.lives--;
     state.view.lifePoints.innerHTML = state.values.lives;
     if(state.values.lives <= 0){
+        playSound("game-over");
         gameOver("lose");
     }
 }
@@ -96,7 +104,7 @@ function reset(){
     state.values.lives = 3;
     state.values.score = 0;
     state.values.tick = 1000;
-    state.values.timer = 10;
+    state.values.timer = 60;
     state.view.timeLeft.innerHTML = state.values.timer;
     state.view.scorePoints.innerHTML = state.values.score;
     state.view.lifePoints.innerHTML = state.values.lives;
