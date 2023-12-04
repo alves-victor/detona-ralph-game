@@ -13,6 +13,10 @@ const state = {
         clicked: false,
         lives: 3,
         timer: 10
+    },
+    intervals: {
+        moveEnemyId: null,
+        timerId: null,
     }
 }
 
@@ -56,12 +60,12 @@ function registerClickedState(clicked){
 }
 
 function moveEnemy(){
-    setInterval(addEnemyToRandomSquare, state.values.tick);
+    state.intervals.moveEnemyId = setInterval(addEnemyToRandomSquare, state.values.tick);
 }
 
 function timer(){
-    setInterval(() => {
-        if(state.values.timer <= 1){
+    state.intervals.timerId = setInterval(() => {
+        if(state.values.timer <= 0){
             gameOver("win");
         }
         state.values.timer--;
@@ -96,6 +100,9 @@ function reset(){
     state.view.timeLeft.innerHTML = state.values.timer;
     state.view.scorePoints.innerHTML = state.values.score;
     state.view.lifePoints.innerHTML = state.values.lives;
+    clearInterval(state.intervals.moveEnemyId);
+    clearInterval(state.intervals.timerId);
+    init();
 }
 
 function init(){
