@@ -4,7 +4,10 @@ const state = {
         enemy: document.querySelector(".enemy"),
         timeLeft: document.querySelector(".time-left"),
         scorePoints: document.querySelector(".score-points"),
-        lifePoints: document.querySelector(".life-points")
+        lifePoints: document.querySelector(".life-points"),
+        modalMessage: document.querySelector(".modal-result"),
+        modalScore: document.querySelector(".modal-score"),
+        modalVisibility: document.querySelector(".modal")
     },
     values: {
         tick: 1000,
@@ -51,12 +54,9 @@ function addHitListenerOnSquares(){
     state.view.squares.forEach((square) => {
         square.addEventListener("mousedown", () => {
             if(square.id === state.values.hitPosition && state.values.clicked === false){
-                playSound("hit");
-                registerClickedState(true);
-                state.values.score++;
-                state.view.scorePoints.innerHTML = state.values.score;
+                hit();
             }else if(square.id != state.values.hitPosition){
-                missClickDamage();
+                miss();
             }
         })
     })
@@ -80,22 +80,39 @@ function timer(){
     }, state.values.tick)
 }
 
-function missClickDamage(){
+function hit(){
+    playSound("hit");
+    registerClickedState(true);
+    state.values.score++;
+    state.view.scorePoints.innerHTML = state.values.score;
+}
+
+function miss(){
+    playSound("miss");
     state.values.lives--;
     state.view.lifePoints.innerHTML = state.values.lives;
     if(state.values.lives <= 0){
-        playSound("game-over");
         gameOver("lose");
     }
 }
 
 function gameOver(condition){
     if(condition === "win"){
-        alert("Parabéns! Você chegou ao final sem perder todas as vidas. Sua pontuação foi: " + state.values.score);
+        state.view.modalMessage.innerHTML = "You Won";
+        state.view.modalScore.innerHTML = ("Your Score Was: " + state.values.score);
+        clearIntervals()
+        state.view.modalVisibility.classList.add("visible");
     }else if(condition === "lose"){
-        alert("Você perdeu todas as suas vidas! Sua pontuação foi: " + state.values.score);
+        state.view.modalMessage.innerHTML = "You Lost";
+        state.view.modalScore.innerHTML = ("Your Score Was: " + state.values.score);
+        clearIntervals()
+        state.view.modalVisibility.classList.add("visible");
     }
-    reset();
+}
+
+function clearIntervals(){
+    clearInterval(state.intervals.moveEnemyId);
+    clearInterval(state.intervals.timerId);
 }
 
 function reset(){
@@ -108,8 +125,8 @@ function reset(){
     state.view.timeLeft.innerHTML = state.values.timer;
     state.view.scorePoints.innerHTML = state.values.score;
     state.view.lifePoints.innerHTML = state.values.lives;
-    clearInterval(state.intervals.moveEnemyId);
-    clearInterval(state.intervals.timerId);
+    clearIntervals()
+    state.view.modalVisibility.classList.remove("visible");
     init();
 }
 
@@ -117,9 +134,10 @@ function init(){
     state.view.timeLeft.innerHTML = state.values.timer;
     state.view.scorePoints.innerHTML = state.values.score;
     state.view.lifePoints.innerHTML = state.values.lives;
+    addEnemyToRandomSquare();
     moveEnemy();
-    addHitListenerOnSquares();
     timer();
 }
 
+addHitListenerOnSquares();
 init();
