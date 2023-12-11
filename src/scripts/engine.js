@@ -72,7 +72,7 @@ function moveEnemy(){
 
 function timer(){
     state.intervals.timerId = setInterval(() => {
-        if(state.values.timer <= 0){
+        if(state.values.timer <= 1){
             gameOver("win");
         }
         state.values.timer--;
