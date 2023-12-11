@@ -24,7 +24,7 @@
     justify-content: center;
     margin-top: 20px;
     background-color: #833a21;
-    width: 450px;
+    width: fit-content;
     margin: 0 auto;
 }
 
@@ -113,4 +113,59 @@
 @-ms-keyframes fadeIn {
 0% { opacity: 0; }
 100% { opacity: 1; }
+}
+
+/* mobile */
+@media screen and (min-width: 280px){
+    .game-header{
+        font-size: 10px;
+        flex-direction: column;
+        height: 25vh;
+        text-align: center;
+    }
+
+    .panel{
+        margin-top: 10%;
+    }
+
+    .square{
+        width: 120px;
+        height: 120px;
+    }
+
+    .modal-container{
+        width: 80%;
+    }
+
+    .modal-score{
+        font-size: 12px;
+    }
+
+}
+
+/* tablet */
+@media screen and (min-width: 500px){
+    .panel{
+        margin-top: 10%;
+    }
+
+    .square{
+        width: 150px;
+        height: 150px;
+    }
+
+    .modal-score{
+        font-size: 15px;
+    }
+}
+
+@media screen and (min-width: 600px){
+    .square{
+        width: 200px;
+        height: 200px;
+    }
+
+    .modal-score{
+        font-size: 15px;
+    }
 }
