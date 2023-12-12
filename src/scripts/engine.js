@@ -7,7 +7,8 @@ const state = {
         lifePoints: document.querySelector(".life-points"),
         modalMessage: document.querySelector(".modal-result"),
         modalScore: document.querySelector(".modal-score"),
-        modalVisibility: document.querySelector(".modal")
+        modalVisibility: document.querySelector(".modal"),
+        modalBtn: document.querySelector(".modal-btn")
     },
     values: {
         tick: 1000,
@@ -99,15 +100,19 @@ function miss(){
 function gameOver(condition){
     if(condition === "win"){
         state.view.modalMessage.innerHTML = "You Won";
-        state.view.modalScore.innerHTML = ("Your Score Was: " + state.values.score);
-        clearIntervals()
-        state.view.modalVisibility.classList.add("visible");
+        populateModal();
+        clearIntervals();
     }else if(condition === "lose"){
         state.view.modalMessage.innerHTML = "You Lost";
-        state.view.modalScore.innerHTML = ("Your Score Was: " + state.values.score);
-        clearIntervals()
-        state.view.modalVisibility.classList.add("visible");
+        populateModal();
+        clearIntervals();
     }
+}
+
+function populateModal(){
+    state.view.modalScore.innerHTML = ("Your Score Was: " + state.values.score);
+    state.view.modalVisibility.classList.remove("invisible");
+    state.view.modalBtn.innerHTML = "Play Again";
 }
 
 function clearIntervals(){
@@ -126,7 +131,7 @@ function reset(){
     state.view.scorePoints.innerHTML = state.values.score;
     state.view.lifePoints.innerHTML = state.values.lives;
     clearIntervals()
-    state.view.modalVisibility.classList.remove("visible");
+    state.view.modalVisibility.classList.add("invisible");
     init();
 }
 
@@ -139,5 +144,14 @@ function init(){
     timer();
 }
 
+function startGame(){
+    state.view.modalVisibility.classList.add("invisible");
+    init();
+    state.view.modalBtn.removeEventListener("mousedown", startGame);
+    state.view.modalBtn.addEventListener("mousedown", reset);
+}
+
 addHitListenerOnSquares();
-init();
+state.view.modalBtn.addEventListener("mousedown", startGame);
+state.view.modalMessage.innerHTML = "Detone o Ralph";
+state.view.modalBtn.innerHTML = "Play";
