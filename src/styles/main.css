@@ -57,8 +57,6 @@
     background-color: rgba(0, 0, 0, 0.4);
     color: #ffffff;
     z-index: 999;
-    visibility: hidden;
-    opacity: 0;
 }
 
 .modal-container{
@@ -85,9 +83,9 @@
     background-color: #361307;
 }
 
-.visible{
-    visibility: visible;
-    opacity: 1;
+.invisible{
+    visibility: hidden;
+    opacity: 0;
 }
 
 @keyframes fadeIn{
